@@ -9,25 +9,49 @@ class ParametersController < ApplicationController
     else
       render json: {message: "Hello, #{name.capitalize}."}
     end
-
     # have render message down here with output_message
   end
   
-  def guess_a_number
+  def guess_a_number # Handles all requests using :guess
     winning_number = 52
     guess = params[:guess].to_i
-
     if guess < 1 || guess > 100
-      render json: {message: "The number has to be between 1 and 100."}
+      message = "The number has to be between 1 and 100."
     elsif guess == winning_number
-      render json: {message: "You win! The number was #{winning_number}"}
+      message = "You win! The number was #{winning_number}"
     elsif guess < winning_number
-      render json: {message: "#{guess} is too low."}
+      message = "#{guess} is too low."
     elsif guess > winning_number
-      render json: {message: "#{guess} is too high."}
+      message = "#{guess} is too high."
+    end
+    render json: {
+      message: message
+    }
+
+  end
+  def cred_guess_a_number # Handles all requests using :guess
+    if params[:username] == "hugh" && params[:password] == "swordfish"
+      winning_number = 52
+      guess = params[:guess].to_i
+      if guess < 1 || guess > 100
+        message = "The number has to be between 1 and 100."
+      elsif guess == winning_number
+        message = "You win! The number was #{winning_number}"
+      elsif guess < winning_number
+        message = "#{guess} is too low."
+      elsif guess > winning_number
+        message = "#{guess} is too high."
+      end
+      render json: {
+        credentials: "Valid",
+        message: message
+      }
+    else
+      render json: {
+        credentials: "Invalid",
+        message: "You don't have access to this game."
+      }
     end
   end
-  # same as above. have an output_message variable for each if and elsif
-  # then just render json: {message: output_message}
-  # do this clean-up later.
+ 
 end
